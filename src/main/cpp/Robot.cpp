@@ -80,6 +80,7 @@ int main()
 #include <frc/DoubleSolenoid.h>
 #include <frc/PneumaticsControlModule.h>
 
+
 class Robot : public frc::TimedRobot
 {
 private:
@@ -92,12 +93,17 @@ private:
   frc::VictorSP m_motor4{3};
   frc::Compressor phCompressor{1, frc::PneumaticsModuleType::REVPH};
   frc::DoubleSolenoid m_doubleSolenoid{frc::PneumaticsModuleType::REVPH, 2, 3};
+  frc::DoubleSolenoid m_doubleSolenoid_II{frc::PneumaticsModuleType::REVPH, 4, 5};
   frc::Joystick m_stick{1};
+  
+
   static constexpr int kSolenoidButton = 1;
+// -----------Solenoid 1-----------------------
   static constexpr int kDoubleSolenoidForward = 2;
   static constexpr int kDoubleSolenoidReverse = 3;
-  static constexpr int button8 = 8;
+// ----------------------------------
 
+  static constexpr int button8 = 8;
   bool pressureSwitch = phCompressor.GetPressureSwitchValue();
   bool isenable = phCompressor.IsEnabled();
   
@@ -169,7 +175,7 @@ public:
       m_motor4.Set((-LeftY+mul)/2);
     }
     // .~~~~~~~~~~.Turning right and left.~~~~~~~~~~.
-    if ( (RightX>=0.28 or RightX<=-0.28) and LeftY<0.25 and LeftY>-0.25 )
+    if ( (RightX>=0.2 or RightX<=-0.2) and LeftY<0.2 and LeftY>-0.2 )
     {
       m_motor1.Set(RightX/2);
       m_motor2.Set(RightX/2);
@@ -177,7 +183,7 @@ public:
       m_motor4.Set(RightX/2);
     }
     // .~~~~~~~~~~.Stop.~~~~~~~~~~.
-    if(/*RightX==0 and LeftY==0 and RightX==0 and LeftY==0*/ (RightX>-0.2 and RightX<0.2) and (LeftY>-0.2 and LeftY<0.2))
+    if(/*RightX==0 and LeftY==0 and RightX==0 and LeftY==0*/ (RightX>-0.15 and RightX<0.15) and (LeftY>-0.15 and LeftY<0.15))
     {
       m_motor1.Set(0);
       m_motor2.Set(0);
@@ -205,8 +211,25 @@ public:
     }*/
 
     /*.~~~~~~~~~~.Solenoid.~~~~~~~~~~.*/
+    //-----------Solenoid 1-------------
     if (m_stick.GetRawButton(kDoubleSolenoidForward)){    m_doubleSolenoid.Set(frc::DoubleSolenoid::kForward);   }
     if (m_stick.GetRawButton(kDoubleSolenoidReverse)){    m_doubleSolenoid.Set(frc::DoubleSolenoid::kReverse);   }
+   //-------------Solenoid 2------------
+
+    int pov = m_stick.GetPOV();
+
+    if (pov == 270) {
+      m_doubleSolenoid_II.Set(frc::DoubleSolenoid::kForward);
+    }
+//༼ つ ◕_◕ ༽つ      ¯\_(ツ)_/¯
+    else if (pov == 90) {
+      m_doubleSolenoid_II.Set(frc::DoubleSolenoid::kReverse);
+    }
+
+    else{
+      m_doubleSolenoid_II.Set(frc::DoubleSolenoid::kOff);
+    }
+
     if (m_stick.GetRawButton(kSolenoidButton)){   m_doubleSolenoid.Set(frc::DoubleSolenoid::kOff);    }
     /*.~~~~~~~~~~.~~~~~~~~.~~~~~~~~~~.*/
 
