@@ -91,6 +91,7 @@ private:
   frc::VictorSP m_motor2{1};
   frc::VictorSP m_motor3{2};
   frc::VictorSP m_motor4{3};
+  frc::VictorSP m_motor5{4};
   frc::Compressor phCompressor{1, frc::PneumaticsModuleType::REVPH};
   frc::DoubleSolenoid m_doubleSolenoid{frc::PneumaticsModuleType::REVPH, 2, 3};
   frc::DoubleSolenoid m_doubleSolenoid_II{frc::PneumaticsModuleType::REVPH, 4, 5};
@@ -124,6 +125,11 @@ private:
 public:
   void TeleopPeriodic() override
   {
+//--------------Ramię----------------------
+    double RightX_AR = m_stick.GetY();
+
+     m_motor5.Set(RightX_AR);
+//-----------Jazda-------------------------
     double RightX = xbox_stick.GetRightX();
     double LeftY = xbox_stick.GetLeftY();
 
